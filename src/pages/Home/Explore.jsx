@@ -25,8 +25,6 @@ const Explore = () => {
   const pathLineRef = useRef(null);
   const statsRef = useRef([]);
 
-  // A learning journey, in order: how you study -> who teaches you -> how you
-  // engage -> what you walk away with. The numbering carries real meaning here.
   const features = [
     {
       icon: <MdAccessTime className="text-lg" />,

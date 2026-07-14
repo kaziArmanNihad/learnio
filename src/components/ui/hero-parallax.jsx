@@ -50,7 +50,7 @@ export const HeroParallax = ({ products }) => {
   return (
     <div
       ref={ref}
-      className="relative flex h-full w-full flex-col self-auto overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-orange-50/20 pb-16 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:pb-20 lg:pb-28"
+      className="via-50/30 relative flex h-full w-full flex-col self-auto overflow-hidden bg-gradient-to-br from-white to-orange-50/20 pb-16 antialiased [perspective:1000px] [transform-style:preserve-3d] sm:pb-20 lg:pb-28"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -394,7 +394,7 @@ export const ProductCard = ({ product, translate }) => {
         y: -20,
       }}
       key={product.title}
-      className="group/product relative h-48 w-72 flex-shrink-0 overflow-hidden rounded-3xl border border-gray-300 shadow-2xl sm:h-56 sm:w-80 lg:h-60 lg:w-96"
+      className="group/product border-300 relative h-48 w-72 flex-shrink-0 overflow-hidden rounded-3xl border shadow-2xl sm:h-56 sm:w-80 lg:h-60 lg:w-96"
       onMouseEnter={(e) => handleCardHover(e.currentTarget, true)}
       onMouseLeave={(e) => handleCardHover(e.currentTarget, false)}
     >
@@ -406,7 +406,7 @@ export const ProductCard = ({ product, translate }) => {
       >
         <img
           src={product.thumbnail}
-          className="card-image absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500"
+          className="card-image absolute inset-0 h-full w-full cursor-pointer object-cover object-center transition-transform duration-500"
           alt={product.title}
         />
       </a>
@@ -447,7 +447,7 @@ export const ProductCard = ({ product, translate }) => {
       </div>
 
       {/* Gradient Border */}
-      <div className="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 group-hover/product:opacity-100">
+      <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 group-hover/product:opacity-100">
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-500/50 to-purple-500/50 p-0.5">
           <div className="h-full w-full rounded-3xl bg-transparent" />
         </div>

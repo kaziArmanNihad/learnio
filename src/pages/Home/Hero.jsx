@@ -16,7 +16,7 @@ const Hero = () => {
 
   useEffect(() => {
     const tl = gsap.timeline();
-
+    const floatingCard = floatingCardRef.current;
     tl.fromTo(
       badgeRef.current,
       {
@@ -104,17 +104,22 @@ const Hero = () => {
       "-=1",
     );
 
-    gsap.to(floatingCardRef.current, {
-      y: -12,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
+    if (floatingCard) {
+      gsap.to(floatingCard, {
+        y: -12,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }
 
     return () => {
       tl.kill();
-      gsap.killTweensOf(floatingCardRef.current);
+
+      if (floatingCard) {
+        gsap.killTweensOf(floatingCard);
+      }
     };
   }, []);
 
@@ -241,26 +246,26 @@ const Hero = () => {
               {/* Floating Card */}
               <div
                 ref={floatingCardRef}
-                className="absolute -bottom-6 -left-6 rounded-2xl border border-white/50 bg-white/90 p-5 shadow-xl backdrop-blur-md"
+                className="absolute -bottom-16 -left-8 rounded-xl border border-white/50 bg-white/90 p-3 shadow-lg backdrop-blur-md sm:-bottom-6 sm:-left-6 sm:rounded-2xl sm:p-5 sm:shadow-xl"
               >
-                <div className="flex items-center justify-center gap-3 text-2xl font-bold text-gray-900">
+                <div className="flex items-center justify-center gap-2 text-lg font-bold text-gray-900 sm:gap-3 sm:text-2xl">
                   95%
-                  <TfiCup className="h-6 w-6" />
+                  <TfiCup className="h-4 w-4 sm:h-6 sm:w-6" />
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-xs text-gray-600 sm:text-sm">
                   Course Completion Rate
                 </div>
               </div>
 
               {/* Top Badge */}
-              <div className="absolute -right-5 top-6 rounded-2xl border border-white/50 bg-white/90 px-5 py-4 shadow-xl backdrop-blur-md">
-                <div className="text-sm font-semibold text-gray-800">
+              <div className="absolute -right-3 -top-8 rounded-xl border border-white/50 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-md sm:-right-5 sm:top-6 sm:rounded-2xl sm:px-5 sm:py-4 sm:shadow-xl">
+                <div className="text-xs font-semibold text-gray-800 sm:text-sm">
                   ⭐ Top Rated Platform
                 </div>
               </div>
 
               {/* Decorative Element */}
-              <div className="absolute left-10 top-10 -z-10 h-full w-full rounded-3xl bg-gradient-to-br from-orange-100 to-orange-200" />
+              <div className="absolute left-5 top-5 -z-10 h-full w-full rounded-2xl bg-gradient-to-br from-orange-100 to-orange-200 sm:left-10 sm:top-10 sm:rounded-3xl" />
             </div>
           </div>
         </div>
