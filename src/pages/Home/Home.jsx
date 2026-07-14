@@ -1,6 +1,5 @@
 import Hero from "./Hero";
 import LearnioOffers from "./LearnioOffers";
-import Overview from "./Overview";
 import Service from "./Service";
 import Explore from "./Explore";
 import Events from "./Events";
@@ -11,7 +10,6 @@ const Home = () => {
     <div>
       <Hero />
       <LearnioOffers />
-      <Overview />
       <Service />
       <Explore />
       <Events />

@@ -27,6 +27,7 @@ import RejectCourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/R
 import Users from "../pages/Dashboard/AdminDashboard/Users/Users";
 import Contact from "../pages/Contact/Contact";
 import PendingCourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/PenddingCourseReview";
+import About from "../pages/About/About";
 
 const Router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const Router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
       {
         path: "/teacher",

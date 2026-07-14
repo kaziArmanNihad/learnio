@@ -30,6 +30,7 @@ const Navbar = () => {
     { to: "/", label: "Home" },
     { to: "/courses", label: "All Courses" },
     { to: "/contact", label: "Contact" },
+    { to: "/about", label: "About" },
     ...(userEmail
       ? [
           { to: "/teacher", label: "Teacher Enrollment" },

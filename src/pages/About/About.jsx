@@ -10,9 +10,9 @@ import { Link } from "react-router";
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
 
-function Overview() {
+function About() {
   // Refs for animations
-  const overviewRef = useRef(null);
+  const aboutRef = useRef(null);
   const badgeRef = useRef(null);
   const titleRef = useRef(null);
   const cardsRef = useRef([]);
@@ -85,7 +85,7 @@ function Overview() {
           "absolute w-1 h-1 bg-orange-400 rounded-full opacity-20 pointer-events-none";
         particle.style.left = Math.random() * 100 + "%";
         particle.style.top = Math.random() * 100 + "%";
-        overviewRef.current?.appendChild(particle);
+        aboutRef.current?.appendChild(particle);
         particlesRef.current.push(particle);
 
         gsap.to(particle, {
@@ -217,7 +217,7 @@ function Overview() {
         stagger: 0.2,
         ease: "elastic.out(1, 0.8)",
         scrollTrigger: {
-          trigger: overviewRef.current,
+          trigger: aboutRef.current,
           start: "top 60%",
           toggleActions: "play none none reverse",
         },
@@ -263,7 +263,7 @@ function Overview() {
 
   return (
     <div
-      ref={overviewRef}
+      ref={aboutRef}
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-orange-50/20"
     >
       {/* Background Elements */}
@@ -275,7 +275,7 @@ function Overview() {
         />
       </div>
 
-      <div className="max-w-8xl xl:w-8xl relative z-10 mx-auto w-11/12 py-12 sm:py-16 lg:py-20">
+      <div className="max-w-8xl xl:w-8xl relative z-10 mx-auto w-11/12 py-12 sm:py-16 lg:py-2">
         <div className="grid grid-cols-1 items-center gap-12 sm:gap-16 lg:grid-cols-2 lg:gap-20">
           {/* Left Content Section */}
           <div className="flex flex-col space-y-6 sm:space-y-8">
@@ -495,4 +495,4 @@ function Overview() {
   );
 }
 
-export default Overview;
+export default About;
