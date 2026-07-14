@@ -421,7 +421,7 @@ const Service = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="mb-12 grid grid-cols-2 gap-4 sm:mb-16 lg:grid-cols-4 sm:gap-6 lg:mb-20 lg:gap-8">
+        <div className="mb-12 grid grid-cols-2 gap-4 sm:mb-16 sm:gap-6 lg:mb-20 lg:grid-cols-4 lg:gap-8">
           {additionalFeatures.map((feature, index) => (
             <div
               key={feature.title}

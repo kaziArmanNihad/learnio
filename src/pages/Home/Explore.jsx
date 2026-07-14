@@ -8,7 +8,7 @@ import {
   FaCertificate,
 } from "react-icons/fa";
 import { HiSparkles, HiLightningBolt, HiAcademicCap } from "react-icons/hi";
-import { BsArrowRight, BsStars, BsTrophy } from "react-icons/bs";
+import { BsStars, BsTrophy } from "react-icons/bs";
 import { MdTrendingUp, MdAccessTime, MdVerified } from "react-icons/md";
 
 // Register GSAP plugin

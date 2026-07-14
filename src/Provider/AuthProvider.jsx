@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
             userName: currentUser.displayName,
             userPhoto: currentUser.photoURL,
             userEmail: currentUser.email,
-          })
+          }),
         );
         dispatch(toggleLoading(false));
       } else {

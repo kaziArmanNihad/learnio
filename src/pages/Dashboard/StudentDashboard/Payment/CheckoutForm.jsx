@@ -25,11 +25,6 @@ const CheckoutForm = ({ id }) => {
   const [postPayments] = usePostPaymentsMutation();
   const { data, isLoading, isError, error } = useGetEnrollmentsQuery();
 
-  // handle loading
-  if (isLoading) {
-    return <Loading />;
-  }
-
   // handle error
   if (isError) {
     // showing an alert
@@ -60,6 +55,11 @@ const CheckoutForm = ({ id }) => {
 
     fetchClientSecret();
   }, [enrollmentDetails, postPaymentIntent]);
+
+  // handle loading
+  if (isLoading) {
+    return <Loading />;
+  }
 
   // handle submit
   const handleSubmit = async (event) => {
@@ -134,7 +134,7 @@ const CheckoutForm = ({ id }) => {
           })
           .catch((error) => {
             console.log("Error when saving the payment data: ", error);
-            
+
             // showing an alert
             toast.error(error);
           })

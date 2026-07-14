@@ -61,7 +61,7 @@ const ReviewEnrollments = () => {
   // Empty state
   if (enrollments.length === 0) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 overflow-hidden">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20">
         <div className="absolute left-1/4 top-1/4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-r from-blue-400/5 to-cyan-400/5 blur-3xl" />
         <div className="relative z-10 mx-auto w-11/12 max-w-lg">
           <div className="rounded-3xl border border-gray-300 bg-white/90 p-8 text-center shadow-2xl backdrop-blur-sm sm:p-12">
@@ -105,7 +105,7 @@ const ReviewEnrollments = () => {
 
   // Main UI
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 p-4 sm:p-6 lg:p-8 overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 p-4 sm:p-6 lg:p-8">
       {/* Background Effects */}
       <div className="absolute left-1/4 top-1/4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-r from-blue-400/5 to-cyan-400/5 blur-3xl sm:h-96 sm:w-96" />
 
@@ -162,7 +162,7 @@ const ReviewEnrollments = () => {
                       {index + 1}
                     </td>
 
-                    <td className="px-4 py-4 flex items-center gap-3">
+                    <td className="flex items-center gap-3 px-4 py-4">
                       <div className="h-14 w-20 overflow-hidden rounded-xl ring-2 ring-blue-300 ring-offset-2">
                         <img
                           src={enrollment.courseImage}

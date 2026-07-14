@@ -378,18 +378,17 @@ const StudentEnrollments = () => {
       );
     }
 
+    const badge = badgeRef.current;
+    const title = titleRef.current;
+    const filters = filtersRef.current;
+    const content = contentRef.current;
+    const stats = statsRef.current;
+    const rows = rowsRef.current;
+    const cards = cardsRef.current;
     // Cleanup function for GSAP tweens
     return () => {
       tl.kill();
-      gsap.killTweensOf([
-        badgeRef.current,
-        titleRef.current,
-        filtersRef.current,
-        contentRef.current,
-        statsRef.current,
-        rowsRef.current,
-        cardsRef.current,
-      ]);
+      gsap.killTweensOf([badge, title, filters, content, stats, rows, cards]);
     };
   }, [allEnrollments.length, viewMode, isLoading, filteredEnrollments.length]);
 
@@ -450,13 +449,13 @@ const StudentEnrollments = () => {
         "-=0.3",
       );
 
+      const empty = emptyRef.current;
+      const emptyIcon = emptyIconRef.current;
+      const emptyButton = emptyButtonRef.current;
+
       return () => {
         tl.kill();
-        gsap.killTweensOf([
-          emptyRef.current,
-          emptyIconRef.current,
-          emptyButtonRef.current,
-        ]);
+        gsap.killTweensOf([empty, emptyIcon, emptyButton]);
       };
     }
   }, [allEnrollments.length, isLoading]); // Dependency array includes the condition for running

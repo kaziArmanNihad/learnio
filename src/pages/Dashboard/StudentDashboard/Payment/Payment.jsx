@@ -8,11 +8,12 @@ const Payment = () => {
   const { id } = useParams();
   const stripePromise = loadStripe(import.meta.env.VITE_GETWAY_PK);
 
-
   return (
-    <div className="w-full h-screen bg-[#e0cece] flex justify-center items-center">
-      <div className="w-4/5 h-1/2 bg-[#c7c1c1] space-y-5 rounded-xl">
-        <h1 className="text-base font-bold text-center p-2 md:text-2xl">Make Payment</h1>
+    <div className="flex h-screen w-full items-center justify-center bg-[#e0cece]">
+      <div className="h-1/2 w-4/5 space-y-5 rounded-xl bg-[#c7c1c1]">
+        <h1 className="p-2 text-center text-base font-bold md:text-2xl">
+          Make Payment
+        </h1>
         <div className="p-5">
           <Elements stripe={stripePromise}>
             <CheckoutForm id={id} />

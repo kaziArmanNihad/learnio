@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaUsers, FaGraduationCap, FaClock } from "react-icons/fa";
@@ -10,8 +10,6 @@ import { MdEvent, MdGroups } from "react-icons/md";
 gsap.registerPlugin(ScrollTrigger);
 
 const Events = () => {
-  const [activeCard, setActiveCard] = useState(null);
-
   // Refs for animations
   const eventsRef = useRef(null);
   const bannerImageRef = useRef(null);
@@ -277,9 +275,8 @@ const Events = () => {
   }, []);
 
   // Card hover animations
-  const handleCardHover = (element, isEntering, index) => {
+  const handleCardHover = (element, isEntering) => {
     if (isEntering) {
-      setActiveCard(index);
       gsap.to(element, {
         y: -15,
         scale: 1.03,
@@ -288,7 +285,6 @@ const Events = () => {
         ease: "power2.out",
       });
     } else {
-      setActiveCard(null);
       gsap.to(element, {
         y: 0,
         scale: 1,

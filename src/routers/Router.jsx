@@ -25,8 +25,8 @@ import CourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/CourseR
 import ActiveCourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/ActiveCourseReview";
 import RejectCourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/RejectCourseReview";
 import Users from "../pages/Dashboard/AdminDashboard/Users/Users";
-import Contact from '../pages/Contact/Contact';
-import PendingCourseReview from '../pages/Dashboard/AdminDashboard/CourseReview/PenddingCourseReview';
+import Contact from "../pages/Contact/Contact";
+import PendingCourseReview from "../pages/Dashboard/AdminDashboard/CourseReview/PenddingCourseReview";
 
 const Router = createBrowserRouter([
   {

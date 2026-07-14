@@ -187,7 +187,7 @@ const TeacherCourses = () => {
                     </td>
 
                     <td className="px-4 py-4">
-                      <span className="block max-w-xs truncate text-sm font-medium text-gray-800 uppercase">
+                      <span className="block max-w-xs truncate text-sm font-medium uppercase text-gray-800">
                         {course.courseTitle}
                       </span>
                     </td>

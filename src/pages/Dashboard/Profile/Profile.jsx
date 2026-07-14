@@ -6,9 +6,9 @@ import { useState } from "react";
 const Profile = () => {
   // States
   const { userName, userEmail, userPhoto } = useSelector(
-    (state) => state.userSlice
+    (state) => state.userSlice,
   );
-  
+
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -24,30 +24,31 @@ const Profile = () => {
 
   // Generate initials for fallback
   const getInitials = (name) => {
-    return name
-      ?.split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .join('')
-      .slice(0, 2) || 'U';
+    return (
+      name
+        ?.split(" ")
+        .map((word) => word.charAt(0).toUpperCase())
+        .join("")
+        .slice(0, 2) || "U"
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:shadow-3xl">
-        
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 p-4">
+      <div className="hover:shadow-3xl w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-300">
         {/* Header Section with Background Pattern */}
-        <div className="relative h-32 bg-gradient-to-r from-blue-500 to-sky-500  overflow-hidden">
+        <div className="relative h-32 overflow-hidden bg-gradient-to-r from-blue-500 to-sky-500">
           <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-          <div className="absolute -top-4 -right-4 w-32 h-32 bg-white bg-opacity-10 rounded-full"></div>
-          <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-white bg-opacity-10 rounded-full"></div>
+          <div className="absolute -right-4 -top-4 h-32 w-32 rounded-full bg-white bg-opacity-10"></div>
+          <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white bg-opacity-10"></div>
         </div>
 
         {/* Profile Image Section */}
-        <div className="relative flex justify-center -mt-16 mb-6">
-          <div className="relative group">
+        <div className="relative -mt-16 mb-6 flex justify-center">
+          <div className="group relative">
             {imageError || !userPhoto ? (
               // Fallback Avatar
-              <div className="w-32 h-32 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+              <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-gray-300 to-gray-400 shadow-lg">
                 <span className="text-3xl font-bold text-gray-600">
                   {getInitials(userName)}
                 </span>
@@ -55,72 +56,81 @@ const Profile = () => {
             ) : (
               <div className="relative">
                 {imageLoading && (
-                  <div className="w-32 h-32 bg-gray-200 rounded-full border-4 border-white shadow-lg animate-pulse"></div>
+                  <div className="h-32 w-32 animate-pulse rounded-full border-4 border-white bg-gray-200 shadow-lg"></div>
                 )}
                 <img
                   src={userPhoto}
                   alt={`${userName}'s profile`}
-                  className={`w-32 h-32 object-cover rounded-full border-4 border-white shadow-lg transition-all duration-300 ${
-                    imageLoading ? 'opacity-0 absolute' : 'opacity-100'
+                  className={`h-32 w-32 rounded-full border-4 border-white object-cover shadow-lg transition-all duration-300 ${
+                    imageLoading ? "absolute opacity-0" : "opacity-100"
                   }`}
                   onError={handleImageError}
                   onLoad={handleImageLoad}
                 />
               </div>
             )}
-            
+
             {/* Camera overlay on hover */}
-            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Camera className="w-8 h-8 text-white" />
+            <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <Camera className="h-8 w-8 text-white" />
             </div>
           </div>
         </div>
 
         {/* Profile Information */}
-        <div className="px-8 pb-8 space-y-6">
-          
+        <div className="space-y-6 px-8 pb-8">
           {/* User Details Card */}
-          <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-            <div className="flex items-center space-x-3 group">
-              <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-200">
-                <User className="w-5 h-5 text-blue-600" />
+          <div className="space-y-4 rounded-xl bg-gray-50 p-6">
+            <div className="group flex items-center space-x-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 transition-colors duration-200 group-hover:bg-blue-200">
+                <User className="h-5 w-5 text-blue-600" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Name</p>
-                <p className="text-lg font-semibold text-gray-900 truncate" title={userName}>
-                  {userName || 'Not provided'}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
+                  Name
+                </p>
+                <p
+                  className="truncate text-lg font-semibold text-gray-900"
+                  title={userName}
+                >
+                  {userName || "Not provided"}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 group">
-              <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-200">
-                <Mail className="w-5 h-5 text-sky-600" />
+            <div className="group flex items-center space-x-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 transition-colors duration-200 group-hover:bg-green-200">
+                <Mail className="h-5 w-5 text-sky-600" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Email</p>
-                <p className="text-lg font-semibold text-gray-900 truncate" title={userEmail}>
-                  {userEmail || 'Not provided'}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium uppercase tracking-wide text-gray-500">
+                  Email
+                </p>
+                <p
+                  className="truncate text-lg font-semibold text-gray-900"
+                  title={userEmail}
+                >
+                  {userEmail || "Not provided"}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link 
-              to="/dashboard/updateProfile" 
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link
+              to="/dashboard/updateProfile"
               className="flex-1"
               aria-label="Update your profile information"
             >
-              <button className="w-full bg-gradient-to-r from-blue-500 to-sky-500  hover:from-blue-600 hover:to-sky-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 group">
-                <Edit3 className="w-5 h-5 group-hover:rotate-12 transition-transform duration-200" />
+              <button className="group flex w-full transform items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:from-blue-600 hover:to-sky-700 hover:shadow-lg">
+                <Edit3 className="h-5 w-5 transition-transform duration-200 group-hover:rotate-12" />
                 <span>Update Profile</span>
               </button>
             </Link>
 
-            <button 
-              className="bg-gradient-to-r from-blue-500 to-sky-500  hover:bg-gray-200 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+            <button
+              className="flex transform items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-gray-200"
               aria-label="Share profile"
             >
               <span>Share</span>
@@ -128,7 +138,7 @@ const Profile = () => {
           </div>
 
           {/* Profile Stats */}
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+          <div className="grid grid-cols-3 gap-4 border-t border-gray-200 pt-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-gray-900">12</p>
               <p className="text-sm text-gray-500">Projects</p>

@@ -425,9 +425,9 @@ function Contact() {
               </div>
 
               <p className="mb-8 text-base leading-relaxed opacity-90 sm:mb-12 sm:text-lg">
-                Choose your preferred way to connect with us. We&#39;re available
-                through multiple channels to ensure you get the support you
-                need.
+                Choose your preferred way to connect with us. We&#39;re
+                available through multiple channels to ensure you get the
+                support you need.
               </p>
 
               {/* Enhanced Contact Cards */}

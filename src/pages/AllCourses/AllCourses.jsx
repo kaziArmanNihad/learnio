@@ -275,7 +275,7 @@ const AllCourses = () => {
       { number: "50K+", label: "Students", icon: HiSparkles },
       { number: "95%", label: "Success Rate", icon: HiLightningBolt },
     ];
-  }, [courses]);
+  }, [courses, categories.length]);
 
   // Handle Loading
   if (isLoading) {
@@ -481,7 +481,7 @@ const AllCourses = () => {
 
             {/* Tab Panels */}
             <div ref={contentRef} className="mt-8 sm:mt-12">
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <TabPanel key={category.id}>
                   <div className="mb-6">
                     <div className="mb-4 flex items-center gap-3">

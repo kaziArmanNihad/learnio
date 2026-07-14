@@ -25,7 +25,7 @@ export const createUser = createAsyncThunk(
     const data = await createUserWithEmailAndPassword(
       auth,
       userEmail,
-      userPassword
+      userPassword,
     );
     await updateProfile(auth.currentUser, {
       displayName: userName,
@@ -38,7 +38,7 @@ export const createUser = createAsyncThunk(
       userPhoto: data.user.photoURL,
       userEmail: data.user.email,
     };
-  }
+  },
 );
 
 // login user with email
@@ -48,7 +48,7 @@ export const loginUser = createAsyncThunk(
     const data = await signInWithEmailAndPassword(
       auth,
       userEmail,
-      userPassword
+      userPassword,
     );
 
     return {
@@ -56,7 +56,7 @@ export const loginUser = createAsyncThunk(
       userPhoto: data.user.photoURL,
       userEmail: data.user.email,
     };
-  }
+  },
 );
 
 // creating user with google
@@ -70,7 +70,7 @@ export const googleSignIn = createAsyncThunk(
       userPhoto: data.user.photoURL,
       userEmail: data.user.email,
     };
-  }
+  },
 );
 
 const userSlice = createSlice({

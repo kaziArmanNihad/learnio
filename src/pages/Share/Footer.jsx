@@ -202,7 +202,7 @@ const Footer = () => {
               />
               <button
                 onClick={handleClick}
-                className="flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-3 font-bold text-white shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-orange-500/25 "
+                className="flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 px-6 py-3 font-bold text-white shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-orange-500/25"
               >
                 <HiLightningBolt className="text-lg" />
               </button>

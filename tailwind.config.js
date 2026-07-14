@@ -1,6 +1,7 @@
 // import defaultTheme from "tailwindcss/defaultTheme";
 // import colors from "tailwindcss/colors";
 import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
+import daisyui from "daisyui";
 
 const addVariablesForColors = ({ addBase, theme }) => {
   const allColors = flattenColorPalette(theme("colors"));
@@ -34,7 +35,7 @@ export default {
       },
     },
   },
-  plugins: [require("daisyui"), addVariablesForColors],
+  plugins: [daisyui, addVariablesForColors],
   daisyui: {
     themes: [],
   },
