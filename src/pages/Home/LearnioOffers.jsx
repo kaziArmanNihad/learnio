@@ -302,7 +302,7 @@ const LearnioOffers = () => {
         <div className="absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full bg-gradient-to-r from-blue-400/5 to-purple-400/5 blur-3xl sm:h-96 sm:w-96" />
       </div>
 
-      <div className="relative z-10 mx-auto w-11/12 max-w-7xl space-y-12 py-12 sm:space-y-16 sm:py-16 lg:space-y-20 lg:py-20 xl:w-4/5">
+      <div className="xl:w-8xl relative z-10 mx-auto w-11/12 max-w-7xl space-y-12 py-12 sm:space-y-16 sm:py-16 lg:space-y-20 lg:py-20">
         {/* Header Section */}
         <div className="flex flex-col items-start justify-between gap-8 lg:gap-12 xl:flex-row">
           {/* Brand Section */}
@@ -331,7 +331,7 @@ const LearnioOffers = () => {
 
             <p
               ref={descriptionRef}
-              className="text-base leading-relaxed text-gray-600 sm:text-lg lg:text-xl"
+              className="text-base leading-relaxed text-gray-600 sm:text-lg lg:text-lg"
             >
               🚀 Learnio is an innovative online learning platform where
               students can connect with expert teachers and purchase
@@ -342,7 +342,7 @@ const LearnioOffers = () => {
             </p>
             <p
               ref={descriptionRef}
-              className="text-base leading-relaxed text-gray-600 sm:text-lg lg:text-xl"
+              className="text-base leading-relaxed text-gray-600 sm:text-lg lg:text-lg"
             >
               Learnio will be always there for you&#39;r help . Adipisci
               nesciunt aut eaque alias, quaerat itaque sapiente suscipit facilis

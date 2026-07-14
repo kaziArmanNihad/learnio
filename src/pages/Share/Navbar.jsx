@@ -253,7 +253,7 @@ const Navbar = () => {
         ref={navbarRef}
         className="fixed left-0 right-0 top-0 z-50 border-b border-gray-300 bg-white/70 backdrop-blur-lg transition-all duration-300"
       >
-        <div className="navbar mx-auto h-full w-full justify-between sm:w-11/12 xl:w-4/5">
+        <div className="xl:w-8xl navbar mx-auto h-full w-full justify-between sm:w-11/12">
           {/* Left Section */}
           <div className="flex items-center justify-start">
             {/* Mobile Menu Button */}

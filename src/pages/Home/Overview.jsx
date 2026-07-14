@@ -275,7 +275,7 @@ function Overview() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-11/12 max-w-7xl py-12 sm:py-16 lg:py-20 xl:w-4/5">
+      <div className="max-w-8xl xl:w-8xl relative z-10 mx-auto w-11/12 py-12 sm:py-16 lg:py-20">
         <div className="grid grid-cols-1 items-center gap-12 sm:gap-16 lg:grid-cols-2 lg:gap-20">
           {/* Left Content Section */}
           <div className="flex flex-col space-y-6 sm:space-y-8">
@@ -394,7 +394,7 @@ function Overview() {
         </div>
 
         {/* Call to Action Section */}
-        <div className="mt-16 text-center sm:mt-20 lg:mt-24">
+        {/* <div className="mt-16 text-center sm:mt-20 lg:mt-24">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 p-8 text-white sm:p-12 lg:p-16">
             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
             <div className="relative z-10">
@@ -410,6 +410,74 @@ function Overview() {
                 Be part of a global movement that&#39;s reshaping education and
                 empowering learners worldwide.
               </p>
+              <Link to="/courses">
+                <button className="group rounded-2xl bg-white px-8 py-4 text-base font-bold text-orange-500 shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-orange-500 hover:text-white sm:px-12 sm:py-5 sm:text-lg lg:text-xl">
+                  <span className="flex items-center justify-center gap-3">
+                    <BsRocket className="text-xl transition-transform duration-300 group-hover:rotate-12" />
+                    Start Your Journey
+                    <HiSparkles className="text-xl transition-transform duration-300 group-hover:scale-125" />
+                  </span>
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div> */}
+        <div className="mt-16 text-center sm:mt-20 lg:mt-24">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-8 text-white shadow-2xl shadow-pink-500/30 sm:p-12 lg:p-16">
+            {/* Decorative dot-grid pattern */}
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, white 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+
+            {/* Soft glow blobs */}
+            <div className="absolute -left-10 -top-10 h-56 w-56 rounded-full bg-white/20 blur-3xl" />
+            <div className="absolute -bottom-10 -right-10 h-56 w-56 rounded-full bg-purple-300/30 blur-3xl" />
+
+            <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px]" />
+
+            <div className="relative z-10">
+              <div className="mb-4 flex items-center justify-center gap-3 sm:mb-6">
+                <div className="rounded-xl bg-white/20 p-3 ring-1 ring-white/30">
+                  <FaGripfire className="text-2xl sm:text-3xl" />
+                </div>
+                <h3 className="text-lg font-bold sm:text-2xl lg:text-4xl">
+                  Join the Learnio Community
+                </h3>
+              </div>
+
+              <p className="mx-auto mb-6 max-w-2xl text-center text-base opacity-90 sm:mb-8 sm:text-lg lg:text-xl">
+                Be part of a global movement that&#39;s reshaping education and
+                empowering learners worldwide.
+              </p>
+
+              {/* Overlapping student avatars */}
+              <div className="mb-8 flex items-center justify-center">
+                <div className="flex -space-x-3">
+                  {[
+                    "https://randomuser.me/api/portraits/women/44.jpg",
+                    "https://randomuser.me/api/portraits/men/32.jpg",
+                    "https://randomuser.me/api/portraits/women/68.jpg",
+                    "https://randomuser.me/api/portraits/men/26.jpg",
+                    "https://i.pinimg.com/736x/8e/72/cc/8e72ccddf7f836088b4d432efbd320d9.jpg",
+                  ].map((src, i) => (
+                    <img
+                      key={i}
+                      src={src}
+                      alt="Learnio student"
+                      className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-md sm:h-12 sm:w-12"
+                    />
+                  ))}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-white/25 text-xs font-bold backdrop-blur-sm sm:h-12 sm:w-12 sm:text-sm">
+                    +2.5k
+                  </div>
+                </div>
+              </div>
+
               <Link to="/courses">
                 <button className="group rounded-2xl bg-white px-8 py-4 text-base font-bold text-orange-500 shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-orange-500 hover:text-white sm:px-12 sm:py-5 sm:text-lg lg:text-xl">
                   <span className="flex items-center justify-center gap-3">
