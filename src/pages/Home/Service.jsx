@@ -5,11 +5,9 @@ import { FaCode, FaMobileAlt, FaPaintBrush, FaAward } from "react-icons/fa";
 import { BsArrowRight, BsStars } from "react-icons/bs";
 import { MdSpeed, MdSecurity, MdSupport } from "react-icons/md";
 
-// Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const Service = () => {
-  // Refs for animations
   const serviceRef = useRef(null);
   const badgeRef = useRef(null);
   const titleRef = useRef(null);
@@ -17,9 +15,7 @@ const Service = () => {
   const cardsRef = useRef([]);
   const featuresRef = useRef([]);
   const ctaRef = useRef(null);
-  const particlesRef = useRef([]);
 
-  // Enhanced services data
   const services = [
     {
       icon: <FaCode className="text-3xl" />,
@@ -65,7 +61,6 @@ const Service = () => {
     },
   ];
 
-  // Additional features
   const additionalFeatures = [
     {
       icon: <MdSpeed className="text-xl" />,
@@ -89,212 +84,192 @@ const Service = () => {
     },
   ];
 
-  // Create subtle particle system
+  // Particles: smooth continuous drift instead of a hard reset/jump on repeat
   useEffect(() => {
-    const createParticles = () => {
+    const ctx = gsap.context(() => {
+      const particles = [];
+
       for (let i = 0; i < 8; i++) {
         const particle = document.createElement("div");
         particle.className =
-          "absolute w-1 h-1 bg-orange-400 rounded-full opacity-20 pointer-events-none";
+          "absolute w-1 h-1 bg-orange-400 rounded-full opacity-0 pointer-events-none";
         particle.style.left = Math.random() * 100 + "%";
         particle.style.top = Math.random() * 100 + "%";
+        particle.style.willChange = "transform, opacity";
         serviceRef.current?.appendChild(particle);
-        particlesRef.current.push(particle);
+        particles.push(particle);
 
-        gsap.to(particle, {
-          y: -100,
-          opacity: 0,
-          duration: Math.random() * 4 + 3,
+        // Fade in -> gentle continuous float -> fade out -> reposition -> repeat
+        // Using a timeline avoids the abrupt "jump back to start" look
+        const tl = gsap.timeline({
           repeat: -1,
-          ease: "power2.out",
           delay: Math.random() * 3,
+          defaults: { ease: "sine.inOut" },
         });
+
+        tl.to(particle, { opacity: 0.25, duration: 1.2 })
+          .to(
+            particle,
+            {
+              y: -120,
+              x: `+=${(Math.random() - 0.5) * 40}`,
+              duration: Math.random() * 3 + 4,
+              ease: "sine.inOut",
+            },
+            "<",
+          )
+          .to(particle, { opacity: 0, duration: 1 }, "-=1")
+          .set(particle, {
+            y: 0,
+            x: 0,
+            left: Math.random() * 100 + "%",
+            top: Math.random() * 100 + "%",
+          });
       }
-    };
 
-    createParticles();
+      return () => particles.forEach((p) => p.remove());
+    }, serviceRef);
 
-    return () => {
-      particlesRef.current.forEach((particle) => particle.remove());
-      particlesRef.current = [];
-    };
+    return () => ctx.revert();
   }, []);
 
-  // Main animations
+  // Main scroll animations, coordinated as timelines so nothing fires out of sync
   useEffect(() => {
-    // Badge animation
-    gsap.fromTo(
-      badgeRef.current,
-      {
-        scale: 0,
-        opacity: 0,
-        rotation: -90,
-      },
-      {
-        scale: 1,
-        opacity: 1,
-        rotation: 0,
-        duration: 0.8,
-        ease: "elastic.out(1, 0.8)",
+    const ctx = gsap.context(() => {
+      // Header sequence: badge -> title -> subtitle, slightly overlapped for fluidity
+      const headerTl = gsap.timeline({
         scrollTrigger: {
           trigger: badgeRef.current,
           start: "top 85%",
           toggleActions: "play none none reverse",
         },
-      },
-    );
+        defaults: { ease: "power3.out" },
+      });
 
-    // Title animation
-    gsap.fromTo(
-      titleRef.current,
-      {
-        y: 60,
-        opacity: 0,
-        scale: 0.8,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      },
-    );
+      headerTl
+        .fromTo(
+          badgeRef.current,
+          { scale: 0.6, opacity: 0, y: 15 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.6 },
+        )
+        .fromTo(
+          titleRef.current,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.35",
+        )
+        .fromTo(
+          subtitleRef.current,
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.45",
+        );
 
-    // Subtitle animation
-    gsap.fromTo(
-      subtitleRef.current,
-      {
-        y: 40,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: subtitleRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      },
-    );
+      // Service cards - subtle, springy but controlled (no heavy 3D rotation, which
+      // tends to look choppy without a matching CSS perspective set on the parent)
+      gsap.set(cardsRef.current, { transformPerspective: 800, force3D: true });
 
-    // Service cards animation
-    gsap.fromTo(
-      cardsRef.current,
-      {
-        y: 100,
-        opacity: 0,
-        scale: 0.8,
-        rotationX: 45,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        rotationX: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "elastic.out(1, 0.6)",
-        scrollTrigger: {
-          trigger: cardsRef.current[0],
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+      gsap.fromTo(
+        cardsRef.current,
+        { y: 70, opacity: 0, scale: 0.94 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.9,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: cardsRef.current[0],
+            start: "top 82%",
+            toggleActions: "play none none reverse",
+          },
         },
-      },
-    );
+      );
 
-    // Features animation
-    gsap.fromTo(
-      featuresRef.current,
-      {
-        y: 50,
-        opacity: 0,
-        scale: 0.9,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-          trigger: featuresRef.current[0],
-          start: "top 85%",
-          toggleActions: "play none none reverse",
+      // Feature tiles
+      gsap.fromTo(
+        featuresRef.current,
+        { y: 35, opacity: 0, scale: 0.95 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: featuresRef.current[0],
+            start: "top 88%",
+            toggleActions: "play none none reverse",
+          },
         },
-      },
-    );
+      );
 
-    // CTA animation
-    gsap.fromTo(
-      ctaRef.current,
-      {
-        y: 80,
-        opacity: 0,
-        scale: 0.9,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: "elastic.out(1, 0.8)",
-        scrollTrigger: {
-          trigger: ctaRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
+      // CTA
+      gsap.fromTo(
+        ctaRef.current,
+        { y: 50, opacity: 0, scale: 0.96 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ctaRef.current,
+            start: "top 88%",
+            toggleActions: "play none none reverse",
+          },
         },
-      },
-    );
+      );
+    }, serviceRef);
+
+    return () => ctx.revert();
   }, []);
 
-  // Card hover animations
-  const handleCardHover = (element, isEntering) => {
-    if (isEntering) {
-      gsap.to(element, {
-        y: -15,
-        scale: 1.02,
-        rotationY: 5,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    } else {
-      gsap.to(element, {
-        y: 0,
-        scale: 1,
-        rotationY: 0,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    }
+  // Smooth, interruption-safe hover using quickTo (reuses a single tween per
+  // property instead of spawning a new gsap.to() on every mouse event)
+  const attachCardHover = (el) => {
+    if (!el) return;
+    const y = gsap.quickTo(el, "y", { duration: 0.4, ease: "power3.out" });
+    const scale = gsap.quickTo(el, "scale", {
+      duration: 0.4,
+      ease: "power3.out",
+    });
+    const rotationY = gsap.quickTo(el, "rotationY", {
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    el.addEventListener("mouseenter", () => {
+      y(-12);
+      scale(1.02);
+      rotationY(4);
+    });
+    el.addEventListener("mouseleave", () => {
+      y(0);
+      scale(1);
+      rotationY(0);
+    });
   };
 
-  // Button hover animations
-  const handleButtonHover = (element, isEntering) => {
-    if (isEntering) {
-      gsap.to(element, {
-        scale: 1.05,
-        y: -2,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    } else {
-      gsap.to(element, {
-        scale: 1,
-        y: 0,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
+  const attachButtonHover = (el) => {
+    if (!el) return;
+    const y = gsap.quickTo(el, "y", { duration: 0.3, ease: "power2.out" });
+    const scale = gsap.quickTo(el, "scale", {
+      duration: 0.3,
+      ease: "power2.out",
+    });
+
+    el.addEventListener("mouseenter", () => {
+      y(-2);
+      scale(1.04);
+    });
+    el.addEventListener("mouseleave", () => {
+      y(0);
+      scale(1);
+    });
   };
 
   return (
@@ -310,11 +285,10 @@ const Service = () => {
 
       <div className="relative z-10 mx-auto w-11/12 max-w-7xl xl:w-4/5">
         {/* Section Header */}
-        <div className="mb-12 text-center sm:mb-16 lg:mb-20">
-          {/* Badge */}
+        <div className="text-center sm:mb-16 lg:mb-20">
           <div
             ref={badgeRef}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-gradient-to-r from-orange-100 to-pink-100 px-4 py-2 sm:mb-6"
+            className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-gradient-to-r from-orange-100 to-pink-100 px-4 py-2 sm:mb-6"
           >
             <BsStars className="text-sm text-orange-500" />
             <h3 className="text-sm font-bold uppercase tracking-wider text-orange-500">
@@ -322,10 +296,9 @@ const Service = () => {
             </h3>
           </div>
 
-          {/* Main Title */}
           <h2
             ref={titleRef}
-            className="mb-4 text-3xl font-extrabold text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl"
+            className="text-3xl font-extrabold text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl"
           >
             What We{" "}
             <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">
@@ -333,7 +306,6 @@ const Service = () => {
             </span>
           </h2>
 
-          {/* Subtitle */}
           <p
             ref={subtitleRef}
             className="mx-auto max-w-3xl text-base leading-relaxed text-gray-600 sm:text-lg lg:text-xl"
@@ -348,39 +320,34 @@ const Service = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
-              className="group relative transform cursor-pointer flex-col items-start overflow-hidden rounded-3xl border border-gray-300 bg-white/90 p-6 shadow-xl backdrop-blur-sm transition-all duration-500 hover:shadow-2xl sm:p-8"
-              onMouseEnter={(e) => handleCardHover(e.currentTarget, true)}
-              onMouseLeave={(e) => handleCardHover(e.currentTarget, false)}
+              ref={(el) => {
+                cardsRef.current[index] = el;
+                attachCardHover(el);
+              }}
+              className="group relative flex cursor-pointer flex-col items-start overflow-hidden rounded-3xl border border-gray-300 bg-white/90 p-6 shadow-xl backdrop-blur-sm transition-colors duration-300 will-change-transform hover:shadow-2xl sm:p-8"
             >
-              {/* Background Pattern */}
               <div className="absolute right-4 top-4 text-6xl opacity-5 transition-opacity duration-300 group-hover:opacity-10">
                 {service.bgPattern}
               </div>
 
-              {/* Background Gradient */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 transition-opacity duration-500 group-hover:opacity-5`}
               />
 
-              {/* Icon */}
               <div
                 className={`relative inline-flex bg-gradient-to-r p-4 ${service.color} mb-6 rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-110`}
               >
                 <div className="text-white">{service.icon}</div>
               </div>
 
-              {/* Title */}
               <h3 className="relative mb-4 text-xl font-bold text-gray-800 transition-colors duration-300 group-hover:text-orange-500 sm:text-2xl">
                 {service.title}
               </h3>
 
-              {/* Description */}
               <p className="relative mb-6 leading-relaxed text-gray-600 transition-colors duration-300 group-hover:text-gray-700">
                 {service.description}
               </p>
 
-              {/* Features List */}
               <div className="relative mb-6">
                 <h4 className="mb-3 text-sm font-semibold text-gray-800">
                   Key Features:
@@ -400,11 +367,9 @@ const Service = () => {
                 </ul>
               </div>
 
-              {/* Learn More Button */}
               <button
-                className={`relative mt-auto w-full rounded-xl bg-gradient-to-r ${service.color} px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl group-hover:scale-105`}
-                onMouseEnter={(e) => handleButtonHover(e.currentTarget, true)}
-                onMouseLeave={(e) => handleButtonHover(e.currentTarget, false)}
+                ref={attachButtonHover}
+                className={`relative mt-auto w-full rounded-xl bg-gradient-to-r ${service.color} px-6 py-3 font-semibold text-white shadow-lg transition-shadow duration-300 will-change-transform hover:shadow-xl`}
               >
                 <span className="flex items-center justify-center gap-2">
                   Learn More
@@ -412,9 +377,8 @@ const Service = () => {
                 </span>
               </button>
 
-              {/* Bottom Accent */}
               <div
-                className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${service.color} scale-x-0 transform transition-transform duration-500 group-hover:scale-x-100`}
+                className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${service.color} scale-x-0 transform transition-transform duration-500 ease-out group-hover:scale-x-100`}
               />
             </div>
           ))}
@@ -426,7 +390,7 @@ const Service = () => {
             <div
               key={feature.title}
               ref={(el) => (featuresRef.current[index] = el)}
-              className="rounded-2xl border border-gray-300 bg-white/80 p-4 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl sm:p-6"
+              className="rounded-2xl border border-gray-300 bg-white/80 p-4 text-center shadow-lg backdrop-blur-sm transition-shadow duration-300 hover:shadow-xl sm:p-6"
             >
               <div className="mb-3 inline-flex rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 p-3 shadow-lg">
                 <div className="text-white">{feature.icon}</div>
