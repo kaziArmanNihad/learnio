@@ -23,8 +23,6 @@ const Explore = () => {
   const kickerRef = useRef(null);
   const featuresRef = useRef([]);
   const pathLineRef = useRef(null);
-  const buttonRef = useRef(null);
-  const secondaryButtonRef = useRef(null);
   const statsRef = useRef([]);
 
   // A learning journey, in order: how you study -> who teaches you -> how you

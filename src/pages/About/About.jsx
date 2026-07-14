@@ -3,8 +3,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaEye, FaHeart, FaGripfire, FaAddressBook } from "react-icons/fa";
 import { HiSparkles, HiLightningBolt } from "react-icons/hi";
-import { BsRocket, BsStars, BsTrophy } from "react-icons/bs";
-import { MdTrendingUp, MdGroups, MdSchool } from "react-icons/md";
+import { BsRocket, BsStars } from "react-icons/bs";
 import { Link } from "react-router";
 
 // Register GSAP plugin
