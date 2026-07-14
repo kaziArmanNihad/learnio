@@ -52,30 +52,6 @@ function About() {
     },
   ];
 
-  // Achievement stats
-  const achievements = [
-    {
-      icon: <MdGroups className="text-xl" />,
-      number: "50K+",
-      label: "Active Learners",
-    },
-    {
-      icon: <MdSchool className="text-xl" />,
-      number: "1000+",
-      label: "Expert Instructors",
-    },
-    {
-      icon: <BsTrophy className="text-xl" />,
-      number: "95%",
-      label: "Completion Rate",
-    },
-    {
-      icon: <MdTrendingUp className="text-xl" />,
-      number: "24/7",
-      label: "Support Available",
-    },
-  ];
-
   // Create particle system
   useEffect(() => {
     const createParticles = () => {
@@ -313,26 +289,20 @@ function About() {
               </p>
             </div>
 
-            {/* Achievement Stats */}
-            <div className="grid grid-cols-2 gap-4 pt-4 sm:grid-cols-4 lg:grid-cols-2">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={achievement.label}
-                  ref={(el) => (statsRef.current[index] = el)}
-                  className="rounded-xl border border-gray-300 bg-white/80 p-3 text-center shadow-lg backdrop-blur-sm sm:p-4"
-                >
-                  <div className="mb-2 inline-flex rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 p-2 shadow-md">
-                    <div className="text-white">{achievement.icon}</div>
-                  </div>
-                  <div className="text-lg font-bold text-gray-800 sm:text-xl lg:text-2xl">
-                    {achievement.number}
-                  </div>
-                  <div className="text-xs font-medium text-gray-600 sm:text-sm">
-                    {achievement.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* peragraph */}
+            <p className="text-justify">
+              At Learnio, we believe that education should be accessible,
+              engaging, and transformative for everyone. Our platform is
+              designed to connect learners with high-quality courses created by
+              experienced instructors, empowering individuals to develop new
+              skills, advance their careers, and achieve their personal goals.
+              Whether you&#39;re exploring a new passion, preparing for your
+              next professional opportunity, or expanding your knowledge,
+              Learnio provides a flexible and supportive learning environment
+              tailored to your needs. With a growing community of learners and
+              educators, we are committed to making lifelong learning simple,
+              effective, and inspiring for people around the world.
+            </p>
           </div>
 
           {/* Right Cards Section */}
@@ -394,36 +364,9 @@ function About() {
         </div>
 
         {/* Call to Action Section */}
-        {/* <div className="mt-16 text-center sm:mt-20 lg:mt-24">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 p-8 text-white sm:p-12 lg:p-16">
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
-            <div className="relative z-10">
-              <div className="mb-4 flex items-center justify-center gap-3 sm:mb-6">
-                <div className="rounded-xl bg-white/20 p-3">
-                  <FaGripfire className="text-2xl sm:text-3xl" />
-                </div>
-                <h3 className="text-lg font-bold sm:text-2xl lg:text-4xl">
-                  Join the Learnio Community
-                </h3>
-              </div>
-              <p className="mx-auto mb-6 max-w-2xl text-left text-base opacity-90 sm:mb-8 sm:text-lg lg:text-center lg:text-xl">
-                Be part of a global movement that&#39;s reshaping education and
-                empowering learners worldwide.
-              </p>
-              <Link to="/courses">
-                <button className="group rounded-2xl bg-white px-8 py-4 text-base font-bold text-orange-500 shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-orange-500 hover:text-white sm:px-12 sm:py-5 sm:text-lg lg:text-xl">
-                  <span className="flex items-center justify-center gap-3">
-                    <BsRocket className="text-xl transition-transform duration-300 group-hover:rotate-12" />
-                    Start Your Journey
-                    <HiSparkles className="text-xl transition-transform duration-300 group-hover:scale-125" />
-                  </span>
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div> */}
+
         <div className="mt-16 text-center sm:mt-20 lg:mt-24">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-8 text-white shadow-2xl shadow-pink-500/30 sm:p-12 lg:p-16">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 p-8 text-white sm:p-12 lg:p-16">
             {/* Decorative dot-grid pattern */}
             <div
               className="absolute inset-0 opacity-20"
@@ -478,7 +421,7 @@ function About() {
                 </div>
               </div>
 
-              <Link to="/courses">
+              <Link to="/contact">
                 <button className="group rounded-2xl bg-white px-8 py-4 text-base font-bold text-orange-500 shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-orange-500 hover:text-white sm:px-12 sm:py-5 sm:text-lg lg:text-xl">
                   <span className="flex items-center justify-center gap-3">
                     <BsRocket className="text-xl transition-transform duration-300 group-hover:rotate-12" />

@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 import { FaUsers, FaGraduationCap, FaTrophy } from "react-icons/fa";
 import { BsArrowRight, BsPlayCircle, BsStars } from "react-icons/bs";
+import { TfiCup } from "react-icons/tfi";
 
 const Hero = () => {
   const badgeRef = useRef(null);
@@ -196,7 +197,10 @@ const Hero = () => {
             </div>
 
             {/* Stats */}
-            <div className="mx-auto grid max-w-md grid-cols-3 gap-4 sm:gap-6 lg:mx-0 lg:gap-8">
+            <div
+              ref={statsRef}
+              className="mx-auto grid max-w-md grid-cols-3 gap-4 sm:gap-6 lg:mx-0 lg:gap-8"
+            >
               {" "}
               {stats.map((stat) => {
                 const IconComponent = stat.icon;
@@ -239,7 +243,10 @@ const Hero = () => {
                 ref={floatingCardRef}
                 className="absolute -bottom-6 -left-6 rounded-2xl border border-white/50 bg-white/90 p-5 shadow-xl backdrop-blur-md"
               >
-                <div className="text-2xl font-bold text-gray-900">95%</div>
+                <div className="flex items-center justify-center gap-3 text-2xl font-bold text-gray-900">
+                  95%
+                  <TfiCup className="h-6 w-6" />
+                </div>
                 <div className="text-sm text-gray-600">
                   Course Completion Rate
                 </div>
