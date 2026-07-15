@@ -9,8 +9,8 @@ const Payment = () => {
   const stripePromise = loadStripe(import.meta.env.VITE_GETWAY_PK);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-[#e0cece]">
-      <div className="h-1/2 w-4/5 space-y-5 rounded-xl bg-[#c7c1c1]">
+    <div className="flex h-screen w-full items-center justify-center">
+      <div className="h-1/2 w-4/5 space-y-5 rounded-xl bg-orange-500/10 p-5">
         <h1 className="p-2 text-center text-base font-bold md:text-2xl">
           Make Payment
         </h1>

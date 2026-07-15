@@ -4,14 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useGetCourseQuery } from "../../Redux/features/api/coursesApi";
 import Loading from "../../components/Loading/Loading";
-import {
-  FaGripfire,
-  FaUsers,
-  FaStar,
-  FaPlay,
-  FaBookmark,
-  FaShare,
-} from "react-icons/fa";
+import { FaGripfire, FaUsers, FaStar } from "react-icons/fa";
 import { HiSparkles, HiAcademicCap, HiShieldCheck } from "react-icons/hi";
 import {
   BsStars,
@@ -472,13 +465,6 @@ const CourseDetails = () => {
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-            {/* Play Button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button className="group rounded-full bg-white/90 p-4 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:scale-110 sm:p-6">
-                <FaPlay className="ml-1 text-2xl text-orange-500 sm:text-3xl" />
-              </button>
-            </div>
-
             {/* Course Badge */}
             <div
               ref={badgeRef}
@@ -488,16 +474,6 @@ const CourseDetails = () => {
               <span className="text-xs font-bold text-orange-600 sm:text-sm">
                 PREMIUM COURSE
               </span>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="absolute right-4 top-4 flex gap-2 sm:right-6 sm:top-6">
-              <button className="rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/30">
-                <FaBookmark className="text-lg" />
-              </button>
-              <button className="rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/30">
-                <FaShare className="text-lg" />
-              </button>
             </div>
           </div>
         </div>

@@ -8,23 +8,13 @@ import auth from "../../../Firebase/Firebase.Config";
 import Loading from "../../../components/Loading/Loading";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
-import {
-  User,
-  Camera,
-  Mail,
-  Save,
-  X,
-  ArrowLeft,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { User, Camera, Save, X, ArrowLeft } from "lucide-react";
 
 const UpdateProfile = () => {
   // States
   const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState("");
   const [imageError, setImageError] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
 
   // Redux states
   const dispatch = useDispatch();
@@ -112,18 +102,6 @@ const UpdateProfile = () => {
     );
   };
 
-  // Validate image URL
-  // const validateImageUrl = async (url) => {
-  //   if (!url) return true;
-
-  //   try {
-  //     await trigger("userPhoto");
-  //     return true;
-  //   } catch {
-  //     return false;
-  //   }
-  // };
-
   // Handle loading state
   if (isLoading) {
     return <Loading />;
@@ -192,10 +170,10 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
+        <div className="bg-gradient-to-r from-orange-500 to-purple-600 p-6 text-white">
           <div className="flex items-center justify-between">
             <button
               onClick={() => navigate(-1)}
@@ -230,41 +208,11 @@ const UpdateProfile = () => {
                   onLoad={handleImageLoad}
                 />
               )}
-
-              {/* Preview toggle */}
-              <button
-                type="button"
-                onClick={() => setShowPreview(!showPreview)}
-                className="absolute -bottom-2 -right-2 rounded-full bg-blue-500 p-2 text-white shadow-lg transition-all duration-200 hover:bg-blue-600"
-              >
-                {showPreview ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
             </div>
           </div>
 
           {/* Form */}
           <div className="space-y-6">
-            {/* Current Email Display */}
-            <div className="rounded-xl bg-gray-50 p-4">
-              <div className="flex items-center space-x-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200">
-                  <Mail className="h-5 w-5 text-gray-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">
-                    Current Email
-                  </p>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {userEmail}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Name Field */}
             <div className="space-y-2">
               <label

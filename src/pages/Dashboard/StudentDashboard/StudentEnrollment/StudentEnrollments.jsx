@@ -63,10 +63,6 @@ const StudentEnrollments = () => {
   const { data, isLoading, isError, error, refetch } = useGetEnrollmentsQuery();
   const [deleteEnrollments] = useDeleteEnrollmentsMutation();
 
-  // ⚠️ FIX: Remove the infinite re-fetch loop
-  // The original useEffect was: useEffect(() => { if (data) { refetch(); } }, [data]);
-  // This is removed, as RTK Query automatically manages data fetching and caching.
-
   // Filter enrollments only for the current user
   const allEnrollments = useMemo(
     () =>
@@ -393,9 +389,7 @@ const StudentEnrollments = () => {
   }, [allEnrollments.length, viewMode, isLoading, filteredEnrollments.length]);
 
   // Animation for the Empty State
-  // ❌ FIX: Empty state animation logic moved here, using the globally declared refs
   useEffect(() => {
-    // Only run this effect if allEnrollments is truly empty and not loading
     if (allEnrollments.length === 0 && !isLoading) {
       // ⚠️ FIX: Add guards for element existence for GSAP animations
       if (!emptyRef.current || !emptyIconRef.current || !emptyButtonRef.current)
@@ -458,7 +452,7 @@ const StudentEnrollments = () => {
         gsap.killTweensOf([empty, emptyIcon, emptyButton]);
       };
     }
-  }, [allEnrollments.length, isLoading]); // Dependency array includes the condition for running
+  }, [allEnrollments.length, isLoading]);
 
   // Empty state rendering
   if (allEnrollments.length === 0) {
@@ -559,7 +553,6 @@ const StudentEnrollments = () => {
   // Card component for mobile/card view
   const EnrollmentCard = ({ enrollment, index }) => (
     <div
-      // ⚠️ FIX: Resetting refs in useMemo ensures alignment with the current filtered list
       ref={(el) => (cardsRef.current[index] = el)}
       className="rounded-2xl border border-gray-300 bg-white/90 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl"
     >
@@ -684,10 +677,10 @@ const StudentEnrollments = () => {
             {/* Badge */}
             <div
               ref={badgeRef}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-gradient-to-r from-blue-100 to-sky-100 px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-gradient-to-r from-orange-100 to-purple-100 px-4 py-2"
             >
-              <BsStars className="text-sm text-blue-500" />
-              <span className="text-sm font-bold uppercase tracking-wider text-blue-500">
+              <BsStars className="text-sm text-orange-500" />
+              <span className="text-sm font-bold uppercase tracking-wider text-orange-500">
                 My Learning
               </span>
             </div>
@@ -698,7 +691,7 @@ const StudentEnrollments = () => {
               className="mb-6 text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl lg:text-6xl"
             >
               My{" "}
-              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">
                 Enrollments
               </span>
             </h1>
@@ -719,7 +712,7 @@ const StudentEnrollments = () => {
                   ref={(el) => (statsRef.current[index] = el)}
                   className="rounded-2xl border border-gray-300 bg-white/80 p-4 text-center shadow-lg backdrop-blur-sm sm:p-6"
                 >
-                  <div className="mb-3 inline-flex rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 p-3 shadow-lg">
+                  <div className="mb-3 inline-flex rounded-xl bg-gradient-to-r from-orange-500 to-purple-500 p-3 shadow-lg">
                     <IconComponent className="text-lg text-white sm:text-xl" />
                   </div>
                   <div className="text-xl font-bold text-gray-800 sm:text-2xl lg:text-3xl">
@@ -747,7 +740,7 @@ const StudentEnrollments = () => {
                   placeholder="Search courses or teachers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full rounded-xl border-2 border-gray-300 py-3 pl-10 pr-4 transition-all duration-300 focus:border-blue-500 focus:outline-none"
+                  className="w-full rounded-xl border-2 border-gray-300 py-3 pl-10 pr-4 transition-all duration-300 focus:border-orange-500 focus:outline-none"
                 />
               </div>
 
@@ -771,8 +764,8 @@ const StudentEnrollments = () => {
                     onClick={() => setViewMode("table")}
                     className={`rounded-lg p-2 transition-all duration-300 ${
                       viewMode === "table"
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-600 hover:text-blue-500"
+                        ? "bg-orange-500 text-white"
+                        : "text-gray-600 hover:text-purple-500"
                     }`}
                   >
                     <BsList className="text-lg" />
@@ -781,8 +774,8 @@ const StudentEnrollments = () => {
                     onClick={() => setViewMode("cards")}
                     className={`rounded-lg p-2 transition-all duration-300 ${
                       viewMode === "cards"
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-600 hover:text-blue-500"
+                        ? "bg-orange-500 text-white"
+                        : "text-gray-600 hover:text-purple-500"
                     }`}
                   >
                     <BsGrid3X3Gap className="text-lg" />
@@ -821,7 +814,7 @@ const StudentEnrollments = () => {
                     setSearchTerm("");
                     setFilterStatus("all");
                   }}
-                  className="rounded-xl bg-blue-500 px-6 py-3 text-white transition-colors duration-300 hover:bg-blue-600"
+                  className="rounded-xl bg-orange-500 px-6 py-3 text-white transition-colors duration-300 hover:bg-orange-600"
                 >
                   Clear Filters
                 </button>
@@ -829,7 +822,6 @@ const StudentEnrollments = () => {
             ) : viewMode === "cards" ? (
               // Cards View
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {/* Ensure cardsRef is populated correctly for the animation */}
                 {filteredEnrollments.map((enrollment, index) => (
                   <EnrollmentCard
                     key={enrollment._id}
@@ -843,7 +835,7 @@ const StudentEnrollments = () => {
               <div className="overflow-hidden rounded-2xl border border-gray-300 bg-white/90 shadow-lg backdrop-blur-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+                    <thead className="bg-gradient-to-r from-orange-500 to-purple-500 text-white">
                       <tr>
                         <th className="px-4 py-4 text-left text-sm font-bold uppercase tracking-wider">
                           #
@@ -902,7 +894,7 @@ const StudentEnrollments = () => {
                           <td className="whitespace-nowrap px-4 py-4 text-center">
                             {enrollment.paymentStatus === "unpaid" ? (
                               <Link to={`/dashboard/payment/${enrollment._id}`}>
-                                <button className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 font-bold text-white transition-colors duration-300 hover:bg-blue-600">
+                                <button className="inline-flex items-center gap-2 rounded-lg bg-orange-500 px-4 py-2 font-bold text-white transition-colors duration-300 hover:bg-orange-600">
                                   <FaMoneyCheck />
                                   Pay
                                 </button>

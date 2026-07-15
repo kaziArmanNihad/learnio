@@ -23,64 +23,108 @@ import { gsap } from "gsap";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 const Dashboard = () => {
-  // states
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Refs for animations
+  // Refs for animations. Desktop and mobile each get their own logo + menu
+  // item refs — sharing one ref/array between two simultaneously-rendered
+  // trees (both exist in the DOM at once; Tailwind's lg: classes just hide
+  // one with CSS) means the second one to render silently overwrites the
+  // first, so only one side ever animates.
   const sidebarRef = useRef(null);
-  const logoRef = useRef(null);
-  const menuItemsRef = useRef([]);
+  const desktopLogoRef = useRef(null);
+  const mobileLogoRef = useRef(null);
+  const desktopMenuItemsRef = useRef([]);
+  const mobileMenuItemsRef = useRef([]);
   const mobileMenuRef = useRef(null);
   const overlayRef = useRef(null);
 
-  // Redux state
   const { userEmail } = useSelector((state) => state.userSlice);
-
-  // Rtk query hooks - MUST be called unconditionally at the top level
   const { data, isLoading, isError, error } = useGetUsersQuery();
 
-  // GSAP Animations - moved before conditional returns
+  // Reset every render so neither array carries a stale/null entry into
+  // GSAP (avoids the "reading '_gsap' of null" crash).
+  desktopMenuItemsRef.current = [];
+  mobileMenuItemsRef.current = [];
+
   useEffect(() => {
-    if (!data || isLoading || isError) return; // Don't run animations if data isn't ready
+    if (!data || isLoading || isError) return;
 
-    const tl = gsap.timeline();
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-    // Logo animation
-    tl.fromTo(
-      logoRef.current,
-      { scale: 0, rotation: -180, opacity: 0 },
-      { scale: 1, rotation: 0, opacity: 1, duration: 1, ease: "back.out(1.7)" },
-    );
+    const desktopItems = desktopMenuItemsRef.current.filter(Boolean);
+    const mobileItems = mobileMenuItemsRef.current.filter(Boolean);
 
-    // Sidebar slide in
-    tl.fromTo(
-      sidebarRef.current,
-      { x: -300, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
-      "-=0.5",
-    );
+    if (prefersReducedMotion) {
+      gsap.set(
+        [
+          desktopLogoRef.current,
+          mobileLogoRef.current,
+          sidebarRef.current,
+          ...desktopItems,
+          ...mobileItems,
+        ],
+        { opacity: 1, x: 0, y: 0, scale: 1, rotation: 0 },
+      );
+      return;
+    }
 
-    // Menu items stagger animation
-    tl.fromTo(
-      menuItemsRef.current,
-      { x: -50, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
-      "-=0.3",
-    );
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
 
-    // Floating animation for logo
-    gsap.to(logoRef.current, {
-      y: -10,
-      duration: 2,
-      ease: "power2.inOut",
-      yoyo: true,
-      repeat: -1,
-    });
-  }, [data, isLoading, isError]); // Added dependencies
+      tl.fromTo(
+        [desktopLogoRef.current, mobileLogoRef.current],
+        { scale: 0, rotation: -180, opacity: 0 },
+        {
+          scale: 1,
+          rotation: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "back.out(1.7)",
+        },
+      );
 
-  // Mobile menu animations
+      tl.fromTo(
+        sidebarRef.current,
+        { x: -300, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+        "-=0.5",
+      );
+
+      tl.fromTo(
+        desktopItems,
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out" },
+        "-=0.3",
+      );
+
+      // Subtle float on the desktop logo only — the mobile one sits in a
+      // slim sticky header where a bob reads as jittery rather than lively.
+      gsap.to(desktopLogoRef.current, {
+        y: -8,
+        duration: 2.2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+
+      // Interruption-safe hover for every menu item (desktop + mobile)
+      [...desktopItems, ...mobileItems].forEach((item) => {
+        const xTo = gsap.quickTo(item, "x", {
+          duration: 0.3,
+          ease: "power2.out",
+        });
+        item.addEventListener("mouseenter", () => xTo(8));
+        item.addEventListener("mouseleave", () => xTo(0));
+      });
+    }, sidebarRef);
+
+    return () => ctx.revert();
+  }, [data, isLoading, isError]);
+
   const toggleMobileMenu = () => {
     if (!isMobileMenuOpen) {
       setIsMobileMenuOpen(true);
@@ -110,26 +154,6 @@ const Dashboard = () => {
     }
   };
 
-  // Menu item hover animations
-  const handleMenuItemHover = (element, isEntering) => {
-    if (isEntering) {
-      gsap.to(element, {
-        x: 10,
-        scale: 1.05,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    } else {
-      gsap.to(element, {
-        x: 0,
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
-  };
-
-  // handle logout with animation
   const handleLogout = () => {
     const tl = gsap.timeline();
 
@@ -209,43 +233,39 @@ const Dashboard = () => {
     { to: "/courses", icon: SiCoursera, label: "All Courses" },
   ];
 
+  // isMobile picks which ref array this instance registers into, so the
+  // two simultaneously-mounted menus never collide.
   const MenuItem = ({ to, icon: Icon, label, index, isMobile = false }) => (
     <NavLink
-      ref={(el) => (menuItemsRef.current[index] = el)}
+      ref={(el) => {
+        if (!el) return;
+        if (isMobile) mobileMenuItemsRef.current[index] = el;
+        else desktopMenuItemsRef.current[index] = el;
+      }}
       to={to}
       className={({ isActive }) =>
-        `group relative flex transform items-center gap-4 rounded-2xl p-4 transition-all duration-300 ${
+        `group relative flex transform items-center gap-4 rounded-2xl p-4 transition-colors duration-300 will-change-transform ${
           isActive
-            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-            : "text-gray-700 hover:bg-white hover:shadow-md"
+            ? "bg-orange-500 text-white shadow-lg"
+            : "text-gray-700 hover:bg-orange-50 hover:text-orange-600"
         } ${isMobile ? "mb-2" : "mb-3"}`
-      }
-      onMouseEnter={(e) =>
-        !isMobile && handleMenuItemHover(e.currentTarget, true)
-      }
-      onMouseLeave={(e) =>
-        !isMobile && handleMenuItemHover(e.currentTarget, false)
       }
     >
       <Icon className={`text-xl ${isMobile ? "text-lg" : ""}`} />
       <span className="font-medium">{label}</span>
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
     </NavLink>
   );
 
-  // Handle loading - return early after ALL hooks are called
   if (isLoading) {
     return <Loading />;
   }
 
-  // Handle error - return early after ALL hooks are called
   if (isError) {
     console.log("Error When fetching user data: ", error.error);
     toast.error("Error When fetching user data");
     return null;
   }
 
-  // finding the data - this is safe now since we return early for loading/error
   const userInfo = data?.find(
     (user) => user.userEmail.toLowerCase() === userEmail.toLowerCase(),
   );
@@ -253,25 +273,23 @@ const Dashboard = () => {
   const menuItems = getMenuItems(user);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Mobile Header */}
-      <div className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md lg:hidden">
+      <div className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur-md lg:hidden">
         <div className="flex items-center justify-between p-4">
           <button
             onClick={toggleMobileMenu}
-            className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 p-2 text-white shadow-lg transition-all duration-300 hover:shadow-xl"
+            className="rounded-xl bg-orange-500 p-2 text-white shadow-sm transition-colors duration-300 hover:bg-orange-600"
           >
             <HiMenuAlt3 className="text-xl" />
           </button>
-          <div ref={logoRef} className="flex items-center gap-2">
-            <div className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 p-2">
+          <div ref={mobileLogoRef} className="flex items-center gap-2">
+            <div className="rounded-xl bg-orange-500 p-2">
               <FaGripfire className="text-xl text-white" />
             </div>
-            <h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-bold text-transparent">
-              Learnio
-            </h1>
+            <h1 className="text-xl font-bold text-gray-900">Learnio</h1>
           </div>
-          <div className="w-10" /> {/* Spacer */}
+          <div className="w-10" />
         </div>
       </div>
 
@@ -286,18 +304,16 @@ const Dashboard = () => {
       {/* Mobile Sidebar */}
       <div
         ref={mobileMenuRef}
-        className="fixed left-0 top-0 z-50 h-full w-80 overflow-y-auto bg-white/95 shadow-2xl backdrop-blur-lg lg:hidden"
+        className="fixed left-0 top-0 z-50 h-full w-80 overflow-y-auto bg-white shadow-2xl lg:hidden"
         style={{ display: "none" }}
       >
         <div className="p-6">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 p-3">
+              <div className="rounded-xl bg-orange-500 p-3">
                 <FaGripfire className="text-2xl text-white" />
               </div>
-              <h1 className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-2xl font-bold text-transparent">
-                Learnio
-              </h1>
+              <h1 className="text-2xl font-bold text-gray-900">Learnio</h1>
             </div>
             <button
               onClick={toggleMobileMenu}
@@ -325,7 +341,7 @@ const Dashboard = () => {
 
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-4 rounded-2xl p-4 font-medium text-red-600 transition-all duration-300 hover:bg-red-50"
+              className="flex w-full items-center gap-4 rounded-2xl p-4 font-medium text-red-600 transition-colors duration-300 hover:bg-red-50"
             >
               <CgLogOut className="text-lg" />
               Logout
@@ -337,15 +353,18 @@ const Dashboard = () => {
       {/* Desktop Sidebar */}
       <div
         ref={sidebarRef}
-        className="z-40 hidden h-screen w-80 border-r border-gray-300 bg-white/80 shadow-xl backdrop-blur-lg lg:fixed lg:left-0 lg:top-0 lg:block"
+        className="z-40 hidden h-screen w-80 border-r border-gray-300 bg-white shadow-sm lg:fixed lg:left-0 lg:top-0 lg:block"
       >
         <div className="h-full overflow-y-auto p-8">
           {/* Logo Section */}
-          <div ref={logoRef} className="mb-12 text-center">
-            <div className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-500 p-4 shadow-lg">
-              <FaGripfire className="text-3xl text-white" />
-              <h1 className="text-3xl font-bold text-white">Learnio</h1>
+          <div className="mb-12 flex items-center justify-center gap-3">
+            <div
+              ref={desktopLogoRef}
+              className="rounded-xl bg-orange-500 p-3 shadow-sm"
+            >
+              <FaGripfire className="text-2xl text-white" />
             </div>
+            <h1 className="text-2xl font-bold text-gray-900">Learnio</h1>
           </div>
 
           {/* Menu Items */}
@@ -366,13 +385,10 @@ const Dashboard = () => {
 
             <button
               onClick={handleLogout}
-              className="group relative flex w-full items-center gap-4 rounded-2xl p-4 font-medium text-red-600 transition-all duration-300 hover:bg-red-50 hover:shadow-md"
-              onMouseEnter={(e) => handleMenuItemHover(e.currentTarget, true)}
-              onMouseLeave={(e) => handleMenuItemHover(e.currentTarget, false)}
+              className="flex w-full items-center gap-4 rounded-2xl p-4 font-medium text-red-600 transition-colors duration-300 hover:bg-red-50"
             >
               <CgLogOut className="text-xl" />
               Logout
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-400 to-red-500 opacity-0 transition-opacity duration-300 group-hover:opacity-5" />
             </button>
           </div>
         </div>
@@ -380,7 +396,7 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 lg:ml-80">
-        <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 p-6">
+        <div className="min-h-screen overflow-y-auto bg-gray-50 p-6">
           <Outlet />
         </div>
       </div>

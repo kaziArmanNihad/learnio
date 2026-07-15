@@ -167,10 +167,18 @@ const CheckoutForm = ({ id }) => {
         <button
           type="submit"
           disabled={!stripe || !clientSecret || isProcessing}
-          className="btn my-5 w-full bg-indigo-500 py-2 text-lg hover:bg-indigo-600"
+          className="btn my-5 w-full bg-gradient-to-r from-purple-500 to-orange-500 py-2 text-lg"
         >
           {isProcessing ? "Processing..." : "Pay"}
         </button>
+        <a href="https://docs.stripe.com/testing" target="_blank">
+          <button
+            type="button"
+            className="btn w-full bg-gradient-to-r from-orange-500 to-purple-500 py-2 text-lg"
+          >
+            Test Cards
+          </button>
+        </a>
         {paymentError && (
           <p className="mt-4 text-sm font-bold text-red-500 sm:text-base md:text-lg">
             {paymentError}
@@ -178,36 +186,6 @@ const CheckoutForm = ({ id }) => {
         )}
       </form>
     </div>
-
-    // <form onSubmit={handleSubmit}>
-    //   <CardElement
-    //   className=''
-    //     options={{
-    //       style: {
-    //         base: {
-    //           fontSize: "26px",
-    //           color: "black",
-    //           "::placeholder": {
-    //             color: "gray",
-    //           },
-    //         },
-    //         invalid: {
-    //           color: "#9e2146",
-    //         },
-    //       },
-    //     }}
-    //   />
-    //   <button
-    //     type="submit"
-    //     disabled={!stripe || !clientSecret || isProcessing}
-    //     className="my-5 btn bg-indigo-500 hover:bg-indigo-600"
-    //   >
-    //     {isProcessing ? "Processing..." : "Pay"}
-    //   </button>
-    //   {paymentError && (
-    //     <p className="text-xl font-bold text-red-500">{paymentError}</p>
-    //   )}
-    // </form>
   );
 };
 

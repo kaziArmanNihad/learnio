@@ -164,7 +164,7 @@ const PaymentHistory = () => {
         <div className="mb-8 text-center sm:mb-12">
           <h1 className="mb-2 text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl">
             Payment{" "}
-            <span className="bg-gradient-to-r from-blue-500 to-sky-500 bg-clip-text text-transparent">
+            <span className="bg-orange-500 bg-clip-text text-transparent">
               History
             </span>
           </h1>
@@ -177,7 +177,7 @@ const PaymentHistory = () => {
         <div className="overflow-hidden rounded-3xl border border-gray-300 bg-white/90 shadow-2xl backdrop-blur-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+              <thead className="bg-gradient-to-r from-orange-500 to-purple-500 text-white">
                 <tr>
                   <th className="px-4 py-4 text-left text-sm font-bold uppercase tracking-wider">
                     SL
