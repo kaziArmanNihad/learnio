@@ -4,6 +4,20 @@ import { useAddCourseMutation } from "../../../../Redux/features/api/coursesApi"
 import toast from "react-hot-toast";
 import { BsArrowRight } from "react-icons/bs";
 import { HiSparkles } from "react-icons/hi";
+import { FaUserTie, FaBookOpen, FaImage } from "react-icons/fa";
+
+// Small red asterisk so required fields are marked before a person hits
+// submit, instead of only surfacing via a validation error afterward.
+const Required = () => <span className="text-red-500">*</span>;
+
+const SectionHeader = ({ icon, title }) => (
+  <div className="mb-4 flex items-center gap-2 border-b border-gray-200 pb-2">
+    <span className="text-orange-500">{icon}</span>
+    <h2 className="text-sm font-bold uppercase tracking-wide text-gray-700">
+      {title}
+    </h2>
+  </div>
+);
 
 const AddCourse = () => {
   const {
@@ -36,17 +50,27 @@ const AddCourse = () => {
       });
   };
 
+  const inputClass =
+    "w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-800 shadow-inner transition-colors duration-200 focus:border-orange-500 focus:outline-none focus:ring focus:ring-orange-200";
+  const readOnlyClass =
+    "w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 text-gray-700 shadow-inner focus:border-orange-500 focus:outline-none focus:ring focus:ring-orange-200";
+  const labelClass = "mb-2 block text-sm font-semibold text-gray-800";
+  const errorClass = "mt-2 text-sm font-medium text-red-500";
+
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-blue-50/20 p-6 sm:p-8">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-white via-gray-50/30 to-orange-50/20 p-6 sm:p-2">
       {/* Background Elements */}
-      <div className="absolute left-1/4 top-1/4 h-72 w-72 animate-pulse rounded-full bg-gradient-to-r from-blue-400/5 to-cyan-400/5 blur-3xl sm:h-96 sm:w-96" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/4 top-1/4 h-72 w-72 rounded-full bg-gradient-to-r from-orange-400/10 to-transparent blur-3xl sm:h-96 sm:w-96" />
+        <div className="absolute bottom-1/4 right-1/4 h-72 w-72 rounded-full bg-gradient-to-r from-purple-400/10 to-transparent blur-3xl sm:h-96 sm:w-96" />
+      </div>
 
       <div className="relative z-10 mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl">
             Add{" "}
-            <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">
               Course
             </span>
           </h1>
@@ -56,169 +80,168 @@ const AddCourse = () => {
         </div>
 
         {/* Form Container */}
-        <div className="rounded-3xl border border-gray-300 bg-white/90 p-6 shadow-2xl backdrop-blur-sm sm:p-10">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Teacher Info */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Teacher Name
-                </label>
-                <input
-                  type="text"
-                  readOnly
-                  defaultValue={userName}
-                  {...register("courseTeacherName")}
-                  className="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 text-gray-700 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-              </div>
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Teacher Email
-                </label>
-                <input
-                  type="email"
-                  readOnly
-                  defaultValue={userEmail}
-                  {...register("courseTeacherEmail")}
-                  className="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 text-gray-700 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-              </div>
-            </div>
-
-            {/* Course Title and Price */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Course Title
-                </label>
-                <input
-                  type="text"
-                  {...register("courseTitle", {
-                    required: "Course title is required",
-                    maxLength: { value: 22, message: "Max 22 characters" },
-                    minLength: { value: 4, message: "Min 4 characters" },
-                  })}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-                {errors.courseTitle && (
-                  <p className="mt-2 text-sm font-medium text-red-500">
-                    {errors.courseTitle.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Course Price ($)
-                </label>
-                <input
-                  type="number"
-                  {...register("coursePrice", {
-                    required: "Price is required",
-                    max: { value: 500, message: "Must be ≤ 500" },
-                    min: { value: 10, message: "Must be ≥ 10" },
-                  })}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-                {errors.coursePrice && (
-                  <p className="mt-2 text-sm font-medium text-red-500">
-                    {errors.coursePrice.message}
-                  </p>
-                )}
+        <div className="rounded-3xl border border-gray-300 bg-white/90 p-6 backdrop-blur-sm sm:p-10">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            {/* Instructor */}
+            <div>
+              <SectionHeader icon={<FaUserTie />} title="Instructor" />
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={labelClass}>Teacher Name</label>
+                  <input
+                    type="text"
+                    readOnly
+                    defaultValue={userName}
+                    {...register("courseTeacherName")}
+                    className={readOnlyClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Teacher Email</label>
+                  <input
+                    type="email"
+                    readOnly
+                    defaultValue={userEmail}
+                    {...register("courseTeacherEmail")}
+                    className={readOnlyClass}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Category & Student Count */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Category
-                </label>
-                <select
-                  {...register("category")}
-                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                >
-                  <option value="web-development">Web Development</option>
-                  <option value="app-development">App Development</option>
-                  <option value="game-development">Game Development</option>
-                  <option value="uiux-designer">UI/UX Designer</option>
-                  <option value="machine-learning">Machine Learning</option>
-                </select>
-              </div>
+            {/* Course Details */}
+            <div>
+              <SectionHeader icon={<FaBookOpen />} title="Course Details" />
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>
+                      Course Title <Required />
+                    </label>
+                    <input
+                      type="text"
+                      {...register("courseTitle", {
+                        required: "Course title is required",
+                        maxLength: { value: 22, message: "Max 22 characters" },
+                        minLength: { value: 4, message: "Min 4 characters" },
+                      })}
+                      className={inputClass}
+                    />
+                    {errors.courseTitle && (
+                      <p className={errorClass}>{errors.courseTitle.message}</p>
+                    )}
+                  </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Student Count
-                </label>
-                <input
-                  type="number"
-                  readOnly
-                  defaultValue={0}
-                  {...register("courseStudentsCount")}
-                  className="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
+                  <div>
+                    <label className={labelClass}>
+                      Course Price ($) <Required />
+                    </label>
+                    <input
+                      type="number"
+                      {...register("coursePrice", {
+                        required: "Price is required",
+                        max: { value: 500, message: "Must be ≤ 500" },
+                        min: { value: 10, message: "Must be ≥ 10" },
+                      })}
+                      className={inputClass}
+                    />
+                    {errors.coursePrice && (
+                      <p className={errorClass}>{errors.coursePrice.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>Category</label>
+                    <select
+                      {...register("category")}
+                      className={`${inputClass} bg-white`}
+                    >
+                      <option value="web-development">Web Development</option>
+                      <option value="app-development">App Development</option>
+                      <option value="game-development">Game Development</option>
+                      <option value="uiux-designer">UI/UX Designer</option>
+                      {/* Matches the "mechine-learning" id used in the course
+                          library's category filter — see note above the form. */}
+                      <option value="mechine-learning">Machine Learning</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Student Count</label>
+                    <input
+                      type="number"
+                      readOnly
+                      defaultValue={0}
+                      {...register("courseStudentsCount")}
+                      className={readOnlyClass}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Image & Description */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Course Image URL
-                </label>
-                <input
-                  type="text"
-                  {...register("courseImage", {
-                    required: "Course image URL is required",
-                  })}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-                {errors.courseImage && (
-                  <p className="mt-2 text-sm font-medium text-red-500">
-                    {errors.courseImage.message}
-                  </p>
-                )}
-              </div>
+            {/* Media & Description */}
+            <div>
+              <SectionHeader icon={<FaImage />} title="Media & Description" />
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label className={labelClass}>
+                    Course Image URL <Required />
+                  </label>
+                  <input
+                    type="text"
+                    {...register("courseImage", {
+                      required: "Course image URL is required",
+                    })}
+                    className={inputClass}
+                  />
+                  {errors.courseImage && (
+                    <p className={errorClass}>{errors.courseImage.message}</p>
+                  )}
+                </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-gray-800">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  {...register("courseDescription", {
-                    required: "Description is required",
-                    maxLength: { value: 300, message: "Max 300 characters" },
-                    minLength: { value: 10, message: "Min 10 characters" },
-                  })}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 shadow-inner focus:border-blue-500 focus:ring focus:ring-blue-200"
-                />
-                {errors.courseDescription && (
-                  <p className="mt-2 text-sm font-medium text-red-500">
-                    {errors.courseDescription.message}
-                  </p>
-                )}
+                <div>
+                  <label className={labelClass}>
+                    Description <Required />
+                  </label>
+                  <input
+                    type="text"
+                    {...register("courseDescription", {
+                      required: "Description is required",
+                      maxLength: { value: 300, message: "Max 300 characters" },
+                      minLength: { value: 10, message: "Min 10 characters" },
+                    })}
+                    className={inputClass}
+                  />
+                  {errors.courseDescription && (
+                    <p className={errorClass}>
+                      {errors.courseDescription.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Buttons */}
-            <div className="flex flex-col gap-4 pt-4 sm:flex-row sm:justify-center">
-              <button
-                type="submit"
-                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 px-8 py-4 text-base font-bold text-white shadow-xl transition-all duration-300 hover:scale-105 sm:w-auto"
-              >
-                <HiSparkles className="text-xl" />
-                Upload
-                <BsArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-
+            {/* Buttons — clear primary/secondary hierarchy instead of two
+                equally-loud gradient buttons */}
+            <div className="flex flex-col-reverse gap-4 border-t border-gray-200 pt-6 sm:flex-row sm:justify-center">
               <button
                 type="button"
                 onClick={() => reset()}
-                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-red-500 to-rose-500 px-8 py-4 text-base font-bold text-white shadow-xl transition-all duration-300 hover:scale-105 sm:w-auto"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-gray-300 bg-white px-8 py-4 text-base font-bold text-gray-600 transition-colors duration-300 hover:border-red-400 hover:text-red-500 sm:w-auto"
               >
                 Clear Form
+              </button>
+
+              <button
+                type="submit"
+                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-orange-500 to-purple-500 px-8 py-4 text-base font-bold text-white shadow-xl transition-transform duration-300 hover:scale-105 sm:w-auto"
+              >
+                <HiSparkles className="text-xl" />
+                Upload Course
+                <BsArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
           </form>

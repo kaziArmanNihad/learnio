@@ -233,7 +233,7 @@ const Interface = () => {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      <div className="relative mx-auto max-w-4xl px-6 py-20 text-center lg:px-8 lg:py-24">
+      <div className="relative mx-auto max-w-4xl px-6 py-20 text-center lg:px-8 lg:py-4">
         {/* Badge — same solid orange-50 pill as Hero, not a gradient */}
         <div
           ref={badgeRef}
