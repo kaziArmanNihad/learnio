@@ -67,7 +67,7 @@ const TeacherCourses = () => {
               No Courses Yet!
             </h1>
             <p className="mb-8 text-base leading-relaxed text-gray-600 sm:text-lg">
-              {userName}, you haven't added any courses yet.
+              {userName}, you haven&#39;t added any courses yet.
             </p>
 
             <div className="space-y-4">
